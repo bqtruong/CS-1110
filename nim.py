@@ -28,4 +28,3 @@ if lastPlayer == "p":
     print("The player wins!")
 else:
     print("The computer wins!")
-        

@@ -18,5 +18,3 @@ while not done:
     if "-" not in hidden:
         print("You win! The word was \"" + "".join(word) + "\"")
         done = True
-        
-        
