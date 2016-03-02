@@ -9,6 +9,8 @@ while marbles > 0:
         take = marbles
         if marbles // 2 == 0:
             take = int(input("How many marbles do you want to take? (1-1): "))
+            while not take == 1:
+                take = int(input("How many marbles do you want to take? (1-1): "))
         else:
             while not take >= 1 or not take <= (marbles // 2):
                 take = int(input("How many marbles do you want to take? (1-" + str(marbles//2) + "): "))
