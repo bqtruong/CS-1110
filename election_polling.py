@@ -20,13 +20,11 @@ def poll_winner(poll_to_examine):
     winner = [candidates[values.index(max(values))], margin]
     return winner
 def latest_poll_winner_by_state(state):
-    states = ["FLORIDA", "OHIO", "NC"]
-    filenames = ["florida-gop.csv", "ohio-gop.csv", "nc-gop.csv"]
-    return poll_winner(read_data_file(filenames[states.index(state)])[0])
+    filename = state.lower() + "-gop.csv"
+    return poll_winner(read_data_file(filename)[0])
 def average_of_polls(state, number_of_polls=5):
-    states = ["FLORIDA", "OHIO", "NC"]
-    filenames = ["florida-gop.csv", "ohio-gop.csv", "nc-gop.csv"]
-    breakset = read_data_file(filenames[states.index(state)])[0:number_of_polls]
+    filename = state.lower() + "-gop.csv"
+    breakset = read_data_file(filename)[0:number_of_polls]
     average = ["Average Poll", number_of_polls, -1, -1, -1, -1, -1, -1]
     sums = [0, 0, -1, -1, -1, -1, -1, -1] #0 is placeholder value for loop convenience
     for row in breakset:
@@ -35,3 +33,4 @@ def average_of_polls(state, number_of_polls=5):
     sums = [int(sums[x]/number_of_polls) for x in range(2,8)]
     average[2:8] = sums
     return average
+
