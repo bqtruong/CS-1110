@@ -1,4 +1,5 @@
 import urllib.request
+import codecs
 
 def find_emails_in_website(url):
     stream = urllib.request.urlopen(url)
@@ -56,11 +57,11 @@ def transform(line,index):
     for i in range(len(replacements[0])):
         decoded = decoded.replace(replacements[0][i],replacements[1][i])
     decoded = decoded.strip().rstrip(".")
-    if index == 31:
+    if index == 31: # Underscore
         decoded = decoded.replace("_",decoded[62])
-    if index == 33:
+    if index == 33: # Reverse
         decoded = decoded[::-1]
-    if index == 35:
+    if index == 35: # First, Last initial
         first = ""
         last = ""
         index = 11 # Beginning index of first name
@@ -72,38 +73,29 @@ def transform(line,index):
                 index += 1
         last = decoded[index+1]
         decoded = decoded.replace("first name plus my last initial",first+last)
-    if index == 37:
+    if index == 37: # Markdown
         decoded = decoded.replace("</a>","")
         startindex = len(decoded)-decoded[::-1].index(">")
         code = decoded[startindex:len(decoded)]
         decrypt = markdown(code)
-        #decoded = decoded.replace(decoded[startindex:],code)
-##        print(index1, index2)
-##        print(decoded[index1], decoded[index2])
-##        print(decoded[index1:index2])
-    print(index, decoded)
+        delindex = decoded.index("<")
+        decoded = decoded.replace(decoded[delindex:],decrypt)
     return decoded
 # Converts Markdown's email obfuscation to ASCII
 def markdown(code):
-    global test
     replacements = [["&","#"],["",""]]
     for x in range(len(replacements)):
         code = code.replace(replacements[0][x],replacements[1][x])
     code = code.split(";")
     code.pop()
     decrypt = ""
-    test = code
     for crypt in code:
-        print(str(crypt))
         if list(crypt)[0] == "x":
             crypt = "\\" + crypt
-            print(crypt)
-            #decrypt += crypt.encode("ascii")
+            decrypt += str(codecs.decode(crypt[2:], "hex").decode("UTF-8"))
         else:
             decrypt += str(chr(int(crypt)))
-    print(code)
-    print(decrypt)
-    return -1
+    return decrypt
 def main():
     email1 = find_emails_in_website("https://cs1110.cs.virginia.edu/emails.html")
     email2 = find_emails_in_website("https://cs1110.cs.virginia.edu/emails2.html")
