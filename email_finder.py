@@ -83,6 +83,7 @@ def transform(line,index):
 ##        print(decoded[index1:index2])
     print(index, decoded)
     return decoded
+# Converts Markdown's email obfuscation to ASCII
 def markdown(code):
     global test
     replacements = [["&","#"],["",""]]
