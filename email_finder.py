@@ -7,6 +7,7 @@ def find_emails_in_website(url):
     recognized = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-"
     for linenum, line in enumerate(stream):
         decoded = transform(line,linenum)
+        print(decoded)
         group = ["",""]
         switch = False
         for index, char in enumerate(decoded):
@@ -53,7 +54,7 @@ def dcheck(endgroup):
 def transform(line,index):
     replacements = [[" at ","(at)",". "," dot "," (dot)","(dot)","NOSPAM","<br>"],
                     ["@",   "@",   " ", ".",    ".",     ".",    "",      ""]]
-    decoded = line.decode("UTF-8") 
+    decoded = line.decode("UTF-8")
     for i in range(len(replacements[0])):
         decoded = decoded.replace(replacements[0][i],replacements[1][i])
     decoded = decoded.strip().rstrip(".")
@@ -91,8 +92,7 @@ def markdown(code):
     decrypt = ""
     for crypt in code:
         if list(crypt)[0] == "x":
-            crypt = "\\" + crypt
-            decrypt += str(codecs.decode(crypt[2:], "hex").decode("UTF-8"))
+            decrypt += str(codecs.decode(crypt[1:], "hex").decode("UTF-8"))
         else:
             decrypt += str(chr(int(crypt)))
     return decrypt
