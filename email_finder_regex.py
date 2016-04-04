@@ -5,7 +5,7 @@ import re
 def find_emails_in_website(url):
     stream = urllib.request.urlopen(url)
     emails = []
-    reg = "([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)"
+    reg = "([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z-.]{2,})"
     regex = re.compile(reg)
     for linenum, line in enumerate(stream):
         decoded = transform(line,linenum)
@@ -13,26 +13,8 @@ def find_emails_in_website(url):
     noduplicates = []
     for email in emails:
         if email not in noduplicates:
-            if dcheck(email[email.index("@"):]) is True:
-                noduplicates.append(email)
+            noduplicates.append(email)
     return noduplicates
-# Parses string after @ sign. Must match TLD greater than 1 char,
-# have only letters, and at least one "."
-def dcheck(endgroup):
-    if "." not in endgroup:
-        return False
-    tld = 0
-    for char in endgroup[::-1]:
-        if char.isalpha():
-            tld += 1
-        elif char == ".":
-            break
-        else:
-            return False
-    if tld < 2:
-        return False
-    else:
-        return True
 # Decodes line from stream. Replaces word with symbol in proper order,
 # strips white space and right ".", special cases for _, reverse,
 # and name (specific to positions on test pages).
